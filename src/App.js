@@ -4,6 +4,7 @@ import Footer from "./components/footer";
 import Note from "./components/note";
 import InputArea from "./components/InputArea";
 import { useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
 
@@ -20,12 +21,30 @@ function App() {
 
   return (
     <div>
-      <Header />
-      <InputArea onAdd={addNote}/>
-      {notes.map((note,i)=>{
-        return <Note key={i} title={note.title} content={note.content} onDelete={()=>deleteNote(i)}/>;
-      })}
-      <Footer />
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <div>
+                <Header />
+                <InputArea onAdd={addNote} />
+                {notes.map((note, i) => {
+                  return (
+                    <Note
+                      key={i}
+                      title={note.title}
+                      content={note.content}
+                      onDelete={() => deleteNote(i)}
+                    />
+                  );
+                })}
+              <Footer />
+              </div>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
