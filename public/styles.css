@@ -1,38 +1,42 @@
-.App {
+@import url('https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Dosis:wght@300;600&display=swap');
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color:plum;
+  background-image: url("https://www.transparenttextures.com/patterns/cubes.png");
+}
+
+header {
+  background-color:indigo;
+  padding: 7px 20px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+  font-family: 'Bungee Spice', cursive;
+}
+
+.note h2 {
+  font-family: 'Dosis', sans-serif;
+  font-size: 1.5rem;
+}
+
+.note h3 {
+  font-family: 'Dosis', sans-serif;
+  font-size: 1rem;
+}
+
+footer {
+  font-family: 'Dosis', sans-serif;
+  font-size: 1rem;
+  position: absolute;
   text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 2s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  bottom: 0;
+  width: 100%;
+  padding-bottom: 1rem;
 }
