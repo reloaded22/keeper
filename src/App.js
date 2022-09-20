@@ -1,18 +1,38 @@
 // React Modules
-import Header from "./components/header";
-import Footer from "./components/footer";
-import Note from "./components/note";
-import InputArea from "./components/InputArea";
 import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+// Components
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import Note from "./components/Note";
+import InputArea from "./components/InputArea";
+import TestPage from "./components/TestPage";
+// UUID
+//import { v4 as uuidv4 } from "uuid";
+// Axios
+const axios = require("axios").default;
 
 function App() {
 
   const [notes, setNotes] = useState([]);
 
   function addNote(note) {
-    console.log("Call addNote(note)\n");
     setNotes((prevNotes) => [...prevNotes, note]);
+    console.log(`note= ${note}`);
+    console.log(`note= ${JSON.stringify(note)}`);
+    axios
+      /*       .post("/", {title:"THIS IS THE TITLE",content:"THIS IS THE CONTENT"}, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }) */
+      .post("/",note)
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
 
   function deleteNote(id) {
@@ -43,6 +63,7 @@ function App() {
               </div>
             }
           />
+          <Route path="/test" element={<TestPage />} />
         </Routes>
       </BrowserRouter>
     </div>
