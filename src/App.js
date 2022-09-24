@@ -14,23 +14,7 @@ function App() {
   // Manage notes in the Front-End
   const [notes, setNotes] = useState([]);
 
-  // Manage notes in the Back-End
-  useEffect(()=>{ // ===> IF I NOT USED THE AXIOS CALL REPEATS IN EVERY RENDER INFINITELY. useEffect ALLOWS TO MAKE THE CALL ONLY WHEN [] CHANGES:
-    console.log("===> Inside useEffect <===")
-    axios
-      .get("/api/notes")
-      .then((res) => {
-        // Set notes equal to the notes received from the API (the nodejs server that communicates with the mongo database)
-        setNotes(res.data); 
-        console.log("Notes in the Mongo database:");
-        console.log(res.data);
-      })
-      .catch((err) => console.log(err));
-  },[])
-
-
   function addNote(note) {
-
     console.log(`Note to add: ${JSON.stringify(note)}`);
 
     // Add note in the Back-End
@@ -46,21 +30,40 @@ function App() {
       });
   }
 
-  function deleteNote(id) {
-    // Update the front-end inmediately
-    // setNotes(notes.filter((prevNotes, index) => index !== id));
+  function deleteNote(del_id) {
+    // Solution #1: Using DELETE
+    axios
+      .delete(`api/notes/${del_id}`)
+      .then(
+        // Update the front-end as well
+        setNotes(notes.filter((note) => note._id !== del_id))
+      )
+      .catch((err) => console.log(err));
 
-    axios({
-      method: "delete",
-      url: `api/notes/${notes[id]._id}`,
-      data: {
-        id: notes[id]._id,
-      },
-    })
-    
-    setNotes(notes.filter((prevNotes, index) => index !== id))
-
+    // Solution #2: Using POST ===> IT ALSO WORKS FINE
+/*     axios
+      .post(`api/notes/${del_id}`)
+      .then(
+        // Update the front-end as well
+        setNotes(notes.filter((note) => note._id !== del_id))
+      )
+      .catch((err) => console.log(err)); */
   }
+
+  // Manage notes in the Back-End
+  useEffect(() => {
+    // ===> IF I NOT USED THE AXIOS CALL REPEATS IN EVERY RENDER INFINITELY. useEffect ALLOWS TO MAKE THE CALL ONLY WHEN [] CHANGES:
+
+    axios
+      .get("/api/notes")
+      .then((res) => {
+        // Set notes equal to the notes received from the API (the nodejs server that communicates with the mongo database)
+        setNotes(res.data);
+        console.log("Notes in the Mongo database:");
+        console.log(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <div>
@@ -73,12 +76,14 @@ function App() {
                 <Header />
                 <InputArea onAdd={addNote} />
                 {notes.map((note, i) => {
+                  const note_id = notes[i]._id;
                   return (
                     <Note
                       key={i}
                       title={note.title}
                       content={note.content}
-                      onDelete={() => deleteNote(i)}
+                      obj_id={note_id}
+                      onDelete={() => deleteNote(note_id)}
                     />
                   );
                 })}
@@ -91,6 +96,7 @@ function App() {
       </BrowserRouter>
     </div>
   );
+
 }
 
 export default App;

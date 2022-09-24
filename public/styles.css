@@ -87,6 +87,13 @@ header {
   padding: 5px 10px;
 }
 
+.note h4 {
+  font-family: 'Dosis', sans-serif;
+  font-size: 0.75rem;
+  color:darkslategrey;
+  padding: 5px 10px;
+}
+
 .note button {
   display: block;
   margin: 5px 5px 5px auto;
