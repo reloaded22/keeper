@@ -47,7 +47,19 @@ function App() {
   }
 
   function deleteNote(id) {
-    setNotes(notes.filter((prevNotes, index) => index !== id));
+    // Update the front-end inmediately
+    // setNotes(notes.filter((prevNotes, index) => index !== id));
+
+    axios({
+      method: "delete",
+      url: `api/notes/${notes[id]._id}`,
+      data: {
+        id: notes[id]._id,
+      },
+    })
+    
+    setNotes(notes.filter((prevNotes, index) => index !== id))
+
   }
 
   return (
