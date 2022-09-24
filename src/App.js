@@ -17,21 +17,18 @@ function App() {
   const [notes, setNotes] = useState([]);
 
   function addNote(note) {
+    // Add note in the Front-End
     setNotes((prevNotes) => [...prevNotes, note]);
-    console.log(`note= ${note}`);
     console.log(`note= ${JSON.stringify(note)}`);
+
+    // Add note in the Back-End
     axios
-      /*       .post("/", {title:"THIS IS THE TITLE",content:"THIS IS THE CONTENT"}, {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      }) */
-      .post("/",note)
-      .then(function (response) {
-        console.log(response);
+      .post("/", note)
+      .then(function (res) {
+        console.log(res);
       })
-      .catch(function (error) {
-        console.log(error);
+      .catch(function (err) {
+        console.log(err);
       });
   }
 
