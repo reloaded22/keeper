@@ -13,8 +13,21 @@ import TestPage from "./components/TestPage";
 const axios = require("axios").default;
 
 function App() {
-
+  // Manage notes in the Front-End
   const [notes, setNotes] = useState([]);
+  console.log("notes:");
+  console.log(notes);
+
+  // Manage notes in the Back-End
+  let backNotes;
+  axios
+    .get("/api/notes")
+    .then((res) => {
+      backNotes = res.data;
+      console.log("backNotes:");
+      console.log(backNotes);
+    })
+    .catch((err) => console.log(err));
 
   function addNote(note) {
     // Add note in the Front-End
@@ -23,7 +36,7 @@ function App() {
 
     // Add note in the Back-End
     axios
-      .post("/", note)
+      .post("/api/notes", note)
       .then(function (res) {
         console.log(res);
       })
@@ -56,7 +69,7 @@ function App() {
                     />
                   );
                 })}
-              <Footer />
+                <Footer />
               </div>
             }
           />
