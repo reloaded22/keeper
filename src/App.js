@@ -20,7 +20,7 @@ function App() {
     // Add note in the Back-End
     axios
       .post("/api/notes", note)
-      .then(function (res) {
+      .then((res) => {
         console.log(res);
         // If I don't setNotes here it won't update the new added note on the front-end
         setNotes((prevNotes) => [...prevNotes, note]);
@@ -31,23 +31,15 @@ function App() {
   }
 
   function deleteNote(del_id) {
-    // Solution #1: Using DELETE
     axios
       .delete(`api/notes/${del_id}`)
-      .then(
+      .then((res)=>{
+        console.log("\nEntro al then de la llamada delete de Axios:\n");
+        console.log(res);
         // Update the front-end as well
-        setNotes(notes.filter((note) => note._id !== del_id))
-      )
-      .catch((err) => console.log(err));
-
-    // Solution #2: Using POST ===> IT ALSO WORKS FINE
-/*     axios
-      .post(`api/notes/${del_id}`)
-      .then(
-        // Update the front-end as well
-        setNotes(notes.filter((note) => note._id !== del_id))
-      )
-      .catch((err) => console.log(err)); */
+        setNotes(notes.filter((note) => note._id !== del_id));
+      })
+      .catch((err) => {console.log("\nEntro al catch error de la llamada delete de Axios:\n"); console.log(err)});
   }
 
   // Manage notes in the Back-End
@@ -57,10 +49,10 @@ function App() {
     axios
       .get("/api/notes")
       .then((res) => {
-        // Set notes equal to the notes received from the API (the nodejs server that communicates with the mongo database)
-        setNotes(res.data);
         console.log("Notes in the Mongo database:");
         console.log(res.data);
+        // Set notes equal to the notes received from the API (the nodejs server that communicates with the mongo database)
+        setNotes(res.data);
       })
       .catch((err) => console.log(err));
   }, []);
