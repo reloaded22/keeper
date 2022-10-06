@@ -6,63 +6,126 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Note from "./components/Note";
 import InputArea from "./components/InputArea";
-import TestPage from "./components/TestPage";
 // Axios
 const axios = require("axios").default;
 
 function App() {
+  // MONGO ////////////////////////////////////////////////
   // Manage notes in the Front-End
   const [notes, setNotes] = useState([]);
+  const [click, setClick] = useState("");
+
+  // Read notes in mongo
+  useEffect(() => {
+    axios
+      .get("/api/mongo")
+      .then((res) => {
+        console.log("Notes in the Mongo database:");
+        console.log(res.data);
+        // Set notes equal to the notes received
+        setNotes(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, [click]);
 
   function addNote(note) {
     console.log(`Note to add: ${JSON.stringify(note)}`);
-
-    // Add note in the Back-End
+    // Add note to the database
     axios
-      .post("/api/notes", note)
+      .post("/api/mongo", note)
       .then((res) => {
         console.log(res);
-        // If I don't setNotes here it won't update the new added note on the front-end
-        setNotes((prevNotes) => [...prevNotes, note]);
+        // Re-render to make the axios call inside useEffect
+        // and update the front-end
+        setClick((state) => (state === "click" ? "" : "click"));
       })
       .catch(function (err) {
         console.log(err);
       });
   }
 
-  function deleteNote(del_id) {
+  function deleteNote(id) {
+    console.log(`Id to delete: ${id}`);
+    // Delete note from the database
     axios
-      .delete(`api/notes/${del_id}`)
-      .then((res)=>{
-        console.log("\nEntro al then de la llamada delete de Axios:\n");
+      .delete(`/api/mongo/${id}`)
+      .then((res) => {
+        console.log("\nSuccessful Axios delete call:\n");
         console.log(res);
-        // Update the front-end as well
-        setNotes(notes.filter((note) => note._id !== del_id));
+        // Re-render to make the axios call inside useEffect
+        // and update the front-end
+        setClick((state) => (state === "click" ? "" : "click"));
       })
-      .catch((err) => {console.log("\nEntro al catch error de la llamada delete de Axios:\n"); console.log(err)});
+      .catch((err) => {
+        console.log("\nAxios Error:\n");
+        console.log(err);
+      });
+  }
+  /////////////////////////////////////////////////////////
+
+  // DYNAMO ////////////////////////////////////////////////
+  // Manage notes in the Front-End
+  const [dynamoNotes, setDynamoNotes] = useState([]);
+  const [dynamoClick, setDynamoClick] = useState("");
+
+  // Read notes in Dyanmo
+  useEffect(() => {
+    axios
+      .get("/api/dynamo")
+      .then((res) => {
+        console.log("Notes in the Dynamo database:");
+        console.log(res.data.Items);
+        // Set notes equal to the notes received
+        setDynamoNotes(res.data.Items);
+      })
+      .catch((err) => {
+        console.log("\nAxios error:")
+        console.log(err);
+      });
+  }, [dynamoClick]);
+
+  function addDynamoNote(note) {
+    console.log(`Note to add: ${JSON.stringify(note)}`);
+    // Add note to the database
+    axios
+      .post("/api/dynamo", note)
+      .then((res) => {
+        console.log("\nSuccessful Axios call");
+        // Re-render to make the axios call inside useEffect
+        // and update the front-end
+        setDynamoClick((state) => (state === "click" ? "" : "click"));
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
   }
 
-  // Manage notes in the Back-End
-  useEffect(() => {
-    // ===> IF I NOT USED THE AXIOS CALL REPEATS IN EVERY RENDER INFINITELY. useEffect ALLOWS TO MAKE THE CALL ONLY WHEN [] CHANGES:
-
+  function deleteDynamoNote(id) {
+    console.log(`Id to delete: ${id}`);
+    // Delete note from the database
     axios
-      .get("/api/notes")
+      .delete(`/api/dynamo/${id}`)
       .then((res) => {
-        console.log("Notes in the Mongo database:");
-        console.log(res.data);
-        // Set notes equal to the notes received from the API (the nodejs server that communicates with the mongo database)
-        setNotes(res.data);
+        console.log("\nSuccessful Axios delete call:\n");
+        console.log(res);
+        // Re-render to make the axios call inside useEffect
+        // and update the front-end
+        setDynamoClick((state) => (state === "click" ? "" : "click"));
       })
-      .catch((err) => console.log(err));
-  }, []);
+      .catch((err) => {
+        console.log("\nAxios Error:\n");
+        console.log(err);
+      });
+  }
+  /////////////////////////////////////////////////////////
 
   return (
     <div>
       <BrowserRouter>
         <Routes>
+          {/* MongoDB Route */}
           <Route
-            path="/"
+            path="/mongo"
             element={
               <div>
                 <Header />
@@ -74,7 +137,7 @@ function App() {
                       key={i}
                       title={note.title}
                       content={note.content}
-                      obj_id={note_id}
+                      id={note_id}
                       onDelete={() => deleteNote(note_id)}
                     />
                   );
@@ -83,12 +146,32 @@ function App() {
               </div>
             }
           />
-          <Route path="/test" element={<TestPage />} />
+          {/* DynamoDB Route */}
+          <Route
+            path="/dynamo"
+            element={
+              <div>
+                <Header />
+                <InputArea onAdd={addDynamoNote} />
+                {dynamoNotes.map((note, i) => {
+                  return (
+                    <Note
+                      key={i}
+                      title={note.title}
+                      content={note.content}
+                      id={note.id}
+                      onDelete={() => deleteDynamoNote(note.id)}
+                    />
+                  );
+                })}
+                <Footer />
+              </div>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </div>
   );
-
 }
 
 export default App;
