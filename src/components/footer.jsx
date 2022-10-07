@@ -1,6 +1,6 @@
 
 function Footer() {
-    return <footer>Keeper App © {new Date().getFullYear()}</footer>;
+    return <footer className="footer">Keeper App © {new Date().getFullYear()}</footer>;
 }
 
 export default Footer;
