@@ -129,20 +129,24 @@ function App() {
             element={
               <div>
                 <Header />
-                <InputArea onAdd={addNote} />
-                {notes.map((note, i) => {
-                  const note_id = notes[i]._id;
-                  return (
-                    <Note
-                      key={i}
-                      title={note.title}
-                      content={note.content}
-                      id={note_id}
-                      onDelete={() => deleteNote(note_id)}
-                    />
-                  );
-                })}
-                <Footer />
+                <div className="container">
+                  <InputArea onAdd={addNote} />
+                  <div className="row">
+                    {notes.map((note, i) => {
+                      const note_id = notes[i]._id;
+                      return (
+                        <Note
+                          key={i}
+                          title={note.title}
+                          content={note.content}
+                          id={note_id}
+                          onDelete={() => deleteNote(note_id)}
+                        />
+                      );
+                    })}
+                  </div>
+                  <Footer />
+                </div>
               </div>
             }
           />
@@ -152,19 +156,23 @@ function App() {
             element={
               <div>
                 <Header />
-                <InputArea onAdd={addDynamoNote} />
-                {dynamoNotes.map((note, i) => {
-                  return (
-                    <Note
-                      key={i}
-                      title={note.title}
-                      content={note.content}
-                      id={note.id}
-                      onDelete={() => deleteDynamoNote(note.id)}
-                    />
-                  );
-                })}
-                <Footer />
+                <div className="container">
+                  <InputArea onAdd={addDynamoNote} />
+                  <div className="row">
+                    {dynamoNotes.map((note, i) => {
+                      return (
+                        <Note
+                          key={i}
+                          title={note.title}
+                          content={note.content}
+                          id={note.id}
+                          onDelete={() => deleteDynamoNote(note.id)}
+                        />
+                      );
+                    })}
+                  </div>
+                  <Footer />
+                </div>
               </div>
             }
           />
