@@ -1,6 +1,14 @@
 
 function Footer() {
-    return <footer className="footer">Keeper App © {new Date().getFullYear()}</footer>;
+    return (
+        <footer class="footer">
+          <div class="container text-center">
+            <span class="text-muted">
+              Keeper App © {new Date().getFullYear()}
+            </span>
+          </div>
+        </footer>
+    )
 }
 
 export default Footer;
