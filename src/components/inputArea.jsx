@@ -29,7 +29,7 @@ function InputArea(props) {
         <div className="card-body">
           <form>
             <div className="row mb-3">
-              <label for="inputTitle" className="form-label fs-4">
+              <label htmlFor="inputTitle" className="form-label fs-4">
                 Title
               </label>
               <div className="">
@@ -44,7 +44,7 @@ function InputArea(props) {
               </div>
             </div>
             <div className="row mb-3">
-              <label for="inputContent" className="form-label fs-4">
+              <label htmlFor="inputContent" className="form-label fs-4">
                 Content
               </label>
               <div className="">
