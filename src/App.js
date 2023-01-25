@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 // Components
+import Home from "./components/Home";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Note from "./components/Note";
@@ -123,6 +124,19 @@ function App() {
     <div>
       <BrowserRouter>
         <Routes>
+          {/* Home Route */}
+          <Route
+            path="/"
+            element={
+              <div>
+                <Header />
+                <Home />
+                <div className="container">
+                  <Footer />
+                </div>
+              </div>
+            }
+          />
           {/* MongoDB Route */}
           <Route
             path="/mongo"
